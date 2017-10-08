@@ -30,6 +30,7 @@
             }
             return false;
         });
+
         $('#ui-account-gauges').hover( function() {
             //$('#ui-gauge-refresh').show();
             //gaugeTooltip =
@@ -50,6 +51,11 @@
             return false;
             //$.get($(this).data('href'));
         });
+
+	    $('#ui-expand-all-postback').click(function () {
+		    $('#ui-postback-extended').toggleClass('expanded collapse');
+		    return false;
+	    });
 
         $('#ui-menu-category-feedback').click(function() {
             var $indicator = apnscp.indicator(),
