@@ -204,10 +204,11 @@ window.apnscp = {
         this.o = o;
         if (!o.useCustomHandlers) {
             xhr.done(function (response, textStatus, xhr) {
+	            that.retry = undefined;
                 if (!response.success) {
-
                     return apnscp.ajaxError.apply(that, [xhr, 'Error (' + cmd + ')', 500]);
                 }
+
                 if (o.indicator) {
                     $(o.indicator).removeClass('ui-ajax-loading').addClass('ui-ajax-success');
                 }
@@ -220,6 +221,10 @@ window.apnscp = {
                 }
                 return true;
             }).fail(function (xhr, textStatus, errorThrown) {
+                if (that.retry === undefined) {
+                    that.retry = 1;
+                    return apnscp.cmd.call(that, cmd, args, cb, o);
+                }
                 return apnscp.ajaxError.apply(that, [xhr, textStatus, errorThrown])
             });
         }
