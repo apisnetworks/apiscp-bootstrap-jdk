@@ -726,6 +726,7 @@ window.apnscp = {
             if (dir) $el.open(dir);
             else if (opts.selected) $el.open(opts.selected);
             this._explorerInstance = $el;
+            opts.onLoad();
         } else {
             this._explorerInstance.redisplay(o, dir);
             MODAL_MODE = 'show';
