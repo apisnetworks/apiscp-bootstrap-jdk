@@ -151,6 +151,14 @@ module.exports = function (grunt) {
 				extDot: 'last',
 				dest: JS_PATH
 			},
+			'min-js': {
+				expand: true,
+				cwd: 'dist/js/',
+				src: ['apnscp.js'],
+				ext: PRODUCTION ? '.min.js' : '-custom.min.js',
+				extDot: 'last',
+				dest: JS_PATH
+			}
 		},
 
 		watch: {
@@ -190,7 +198,7 @@ module.exports = function (grunt) {
 	require('jit-grunt')(grunt)
 	require('time-grunt')(grunt)
 
-	grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'browserify', 'babel:dist', 'exec:uglify', 'copy:js'])
+	grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'browserify', 'babel:dist', 'exec:uglify', 'copy:min-js'])
 	//grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'babel:dist', 'browserify', 'copy:js', /*'exec:uglify'*/])
 
 	grunt.registerTask('js-compile', ['babel:dev', 'concat', 'copy:webpack', 'copy:js']);
