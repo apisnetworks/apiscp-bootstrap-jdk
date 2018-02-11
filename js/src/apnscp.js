@@ -199,12 +199,13 @@ window.apnscp = {
                 /* use custom fail/done handlers */
                 useCustomHandlers: false
             }, o);
-        var xhr = $.ajax(o);
+        var xhr = $.ajax(o),
+            deferred = $.Deferred();
         var that = this;
         this.o = o;
         if (!o.useCustomHandlers) {
-            xhr.done(function (response, textStatus, xhr) {
-	            that.retry = undefined;
+
+	        xhr.done(function (response, textStatus, xhr) {
                 if (!response.success) {
                     return apnscp.ajaxError.apply(that, [xhr, 'Error (' + cmd + ')', 500]);
                 }
@@ -217,18 +218,29 @@ window.apnscp = {
                  $('#remote-pb-container').fadeOut();
                  }, 500);*/
                 if (cb && typeof(cb) == "function") {
-                    return cb.call(this, response);
+                    cb.call(this, response);
                 }
-                return true;
+                return deferred.resolve(response, textStatus, xhr);
             }).fail(function (xhr, textStatus, errorThrown) {
                 if (that.retry === undefined) {
-                    that.retry = 1;
-                    return apnscp.cmd.call(that, cmd, args, cb, o);
+                    that.retry = 0;
                 }
-                return apnscp.ajaxError.apply(that, [xhr, textStatus, errorThrown])
+                if (that.retry <= 5) {
+	                that.retry++;
+                    setTimeout(function() {
+	                    var xhrretry = apnscp.cmd.call(that, cmd, args, cb, o).done(
+	                        function(response, textStatus, xhr) {
+                                return deferred.resolve(response, textStatus, xhr);
+
+                        });
+                    }, 125);
+                    return;
+                }
+                apnscp.ajaxError.apply(that, [xhr, textStatus, errorThrown]);
+		        return deferred.reject(xhr, textStatus, errorThrown);
             });
         }
-        return xhr;
+        return deferred;
     },
 
     ajaxError: function (xhr, textStatus, errorThrown) {
@@ -259,7 +271,7 @@ window.apnscp = {
         if (response.status < 1) return;
 
         apnscp.addMessage(msg, "error", "Error");
-        return false;
+        return xhr;
     },
 
     addMessage: function (msg, c, heading) {
