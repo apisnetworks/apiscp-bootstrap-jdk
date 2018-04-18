@@ -196,6 +196,7 @@ window.apnscp = {
                     }
                     //$('#remote-pb-container .alert:visible').fadeOut(function() { $(this).remove(); });
                 },
+                async: true,
                 /* use custom fail/done handlers */
                 useCustomHandlers: false
             }, o);
@@ -240,7 +241,7 @@ window.apnscp = {
 		        return deferred.reject(xhr, textStatus, errorThrown);
             });
         }
-        return deferred;
+        return o.async ? deferred : $.parseJSON(xhr.responseText);
     },
 
     ajaxError: function (xhr, textStatus, errorThrown) {
