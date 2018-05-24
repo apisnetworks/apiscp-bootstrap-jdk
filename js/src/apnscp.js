@@ -241,6 +241,9 @@ window.apnscp = {
 		        return deferred.reject(xhr, textStatus, errorThrown);
             });
         }
+		if (o.useCustomHandlers) {
+			return xhr;
+		}
         return o.async ? deferred : $.parseJSON(xhr.responseText);
     },
 
