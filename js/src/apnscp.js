@@ -1021,7 +1021,15 @@ window.apnscp = {
     };
 
     $.fn.extend({
-        /**
+	    persistDropdownForm: function (toggleClass) {
+		    this.on('click', function (e) {
+			    if ($(this).hasClass(toggleClass || 'dropdown-menu-form')) {
+				    e.stopPropagation();
+			    }
+		    });
+        },
+
+	/**
          *
          * @param string s CSS selector
          */
