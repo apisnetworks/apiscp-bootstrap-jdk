@@ -112,13 +112,17 @@ const Util = (($) => {
 
     getSelectorFromElement(element) {
       let selector = element.getAttribute('data-target')
-
-      if (!selector) {
+      
+      if (!selector || selector === '#') {
         selector = element.getAttribute('href') || ''
-        selector = /^#[a-z]/i.test(selector) ? selector : null
       }
 
-      return selector
+      try {
+        const $selector = $(document).find(selector)
+        return $selector.length > 0 ? selector : null
+      } catch (error) {
+        return null
+      }
     },
 
     reflow(element) {

@@ -122,7 +122,7 @@ const ScrollSpy = (($) => {
 
       this._scrollHeight = this._getScrollHeight()
 
-      const targets = $.makeArray($(this._selector))
+      const targets = $.makeArray(document.querySelectorAll(this._selector))
 
       targets
         .map((element) => {

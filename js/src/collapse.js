@@ -277,7 +277,7 @@ const Collapse = (($) => {
     }
 
     _getParent() {
-      const parent   = $(this._config.parent)[0]
+      const parent   = document.querySelector(this._config.parent)
       const selector =
         `[data-toggle="collapse"][data-parent="${this._config.parent}"]`
 
