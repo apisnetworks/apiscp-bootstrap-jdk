@@ -769,7 +769,9 @@ window.apnscp = {
         if (!o.keyboard) {
             $('.modal-footer', dialog).find('button').hide();
         }
-        $('.modal-title', dialog).text(o.title || 'Launchpad');
+        if (o.title) {
+	        $('.modal-title', dialog).text(o.title);
+        }
         if (o.buttons) {
             $('.modal-body', dialog).append(o.buttons);
         }
