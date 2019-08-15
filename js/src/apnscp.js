@@ -183,13 +183,17 @@ window.apnscp = {
         if (!o.indicator) {
             o.indicator = null;
         }
+        var data = {
+            args: args
+        };
+        data[session['name']] = o.contextId || session.id;
         o = $.extend({},
             {
                 indicator: null,
                 type: "POST",
                 url: "/ajax_engine?engine=cmd&fn=" + cmd,
                 dataType: "json",
-                data: {args: args, s: session.id},
+                data: data,
                 beforeSend: function () {
                     if (o.indicator) {
                         $(o.indicator).removeClass('ui-ajax-success ui-ajax-error').addClass('ui-ajax-indicator ui-ajax-loading');
@@ -372,9 +376,9 @@ window.apnscp = {
         }
         args = {
             args: args,
-            s: session.id,
-            type: o && o.dataType || options.dataType
+            type: o && o.dataType || options.dataType,
         };
+        args[session['name']] = o.contextId || session.id;
         options = $.extend({}, {
             beforeSend: function () {
                 if (options.indicator) {
