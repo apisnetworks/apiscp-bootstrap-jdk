@@ -374,6 +374,7 @@ window.apnscp = {
             console.log("Unknown/erroneous arguments - ", args);
             args = [];
         }
+	o = o || {};
         args = {
             args: args,
             type: o && o.dataType || options.dataType,
