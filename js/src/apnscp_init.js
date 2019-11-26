@@ -1,4 +1,4 @@
-/** 
+/**
  * apnscp initialization functions
  */
 (function ($) {
@@ -9,7 +9,7 @@
                     var params = "resizable=yes,scrollbars=yes,location=yes,status=yes," +
                         "titlebar=yes,toolbar=yes,menubar=yes,height=640,width=780";
                     var win = window.open(e.target.href, 'helpWindow', params);
-                    win.focus();                
+                    win.focus();
                     break;
                 case 'ui-help-tag':
                 case 'ui-overview-link':
@@ -34,7 +34,7 @@
         $('#ui-account-gauges').hover( function() {
             //$('#ui-gauge-refresh').show();
             //gaugeTooltip =
-        }, function () { 
+        }, function () {
             //$('#ui-gauge-refresh').hide();
             //$(this).tooltip
         }).click (function() { apnscp.refresh_gauge(); });
@@ -97,4 +97,13 @@ RegExp.quote = function(str) {
 
 String.prototype.unquote = function() {
     return this.replace(/^['"]+|\s+|\\|(;\s?})+|['"]$/g, '');
+};
+
+window.getNestedObject = function(nestedObj, pathArr) {
+    if (typeof pathArr == 'string') {
+        // dot notation
+        pathArr = pathArr.split('.');
+    }
+    return pathArr.reduce((obj, key) =>
+        (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
 };

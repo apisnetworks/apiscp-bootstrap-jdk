@@ -201,7 +201,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'browserify', 'babel:dist', 'exec:uglify', 'copy:min-js'])
 	//grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'babel:dist', 'browserify', 'copy:js', /*'exec:uglify'*/])
 
-	grunt.registerTask('js-compile', ['babel:dev', 'concat', 'copy:webpack', 'copy:js']);
+	grunt.registerTask('js-compile', ['babel:dev', 'concat', 'copy:webpack', 'browserify', 'copy:js']);
 
 	// Full distribution task.
 	grunt.registerTask('dist', ['clean:dist', 'dist-js'])

@@ -1240,23 +1240,23 @@ window.apnscp = {
         highlight: function (o) {
             o = $.extend({click: true}, o);
             this.hover(function () {
-                $(this).find('li,td').addClass("highlight_over");
+                $(this).find('li,td,div.row').addClass("highlight_over");
             }, function () {
-                $(this).find('li,td').removeClass("highlight_over");
+                $(this).find('li,td,div.row').removeClass("highlight_over");
             }).on('click', function (e) {
                 if (!o.click) return true;
 
                 var target = $(e.target).get(0), node = target.nodeName, type =
                     target.type || "";
                 // only fire if
-                if (node !== 'SPAN' && node !== 'LI' && node != 'TD' &&
+                if (node !== 'SPAN' && node !== 'DIV' && node !== 'LI' && node != 'TD' &&
                     (node != 'INPUT' || (type && type.toUpperCase() != 'CHECKBOX'))) {
                     return true;
                 }
 
                 var $checkbox = $(this).find(':checkbox:eq(0)'),
                     isChecked = $checkbox.prop('checked');
-                $(this).find('li,td').toggleClass('ui-highlight');
+                $(this).find('li,td,div.row').toggleClass('ui-highlight');
                 // originated within checkbox, no need to fire
 
                 if (e.target.type && e.target.type != 'undefined' && e.target.type.toLowerCase() == 'checkbox') {
