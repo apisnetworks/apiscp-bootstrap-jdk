@@ -2,6 +2,15 @@
  * apnscp initialization functions
  */
 (function ($) {
+    $(document).ready(function() {
+        $('#hijackDomain').change(function () {
+            if (!$(this).val()) {
+                // same as active domain
+                return false;
+            }
+            this.form.submit();
+        });
+    });
     $(window).on('load', function () {
         $('#ui-help-container').click(function(e) {
             switch (e.target.id) {
@@ -30,6 +39,8 @@
             }
             return false;
         });
+
+	$('.dropdown-menu-form').persistDropdownForm();
 
         $('#ui-account-gauges').hover( function() {
             //$('#ui-gauge-refresh').show();
