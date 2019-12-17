@@ -778,7 +778,7 @@ window.apnscp = {
 	        $('.modal-title', dialog).text(o.title);
         }
         if (o.buttons) {
-            $('.modal-body', dialog).append(o.buttons);
+            $('.modal-footer', dialog).find(':not(.ui-close-dialog)').remove().end().prepend(o.buttons);
         }
         modalSize = null;
         if (o.size === "large") {
