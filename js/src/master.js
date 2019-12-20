@@ -2,7 +2,8 @@
 require("jquery");
 require("tether");
 import jQuery from 'jquery';*/
-
+window.dayjs = require('dayjs');
+window.relativeTime = require('dayjs/plugin/relativeTime');
 window.jQuery = window.$ = require("jquery");
 require("./jquery_ui");
 window.Tether = require("tether");

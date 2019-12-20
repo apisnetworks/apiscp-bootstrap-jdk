@@ -96,6 +96,59 @@
             return false;
         });
 
+        if (getNestedObject(session, 'role') === 'admin') {
+            dayjs.extend(relativeTime);
+            var jobCheck, animated = false, jobQueue = 0, jobs = [],
+                populateJobs = function()
+                {
+                    $('#ui-job-queue').empty();
+                    for (var idx = jobs.length - 1; idx >= 0; idx--) {
+                        var job = jobs[idx], reservedTime = dayjs.unix(parseInt(job.reserved_at)).fromNow(),
+                            badgeClass = 'badge badge-info';
+                        if (!job.reserved_at) {
+                            badgeClass = 'badge badge-default';
+                            reservedTime = 'pending';
+                        }
+                        $('#ui-job-queue', this).append($('<li class="job" data-id="' + job.id + '">' +
+                            job.name +
+                            '</li>').prepend($('<span>').attr('class', badgeClass).text(reservedTime)));
+                    }
+                };
+            $('#ui-job-indicator').on('show.bs.dropdown', function () {
+                populateJobs();
+            });
+            (jobCheck = function() {
+                    apnscp.cmd('misc_get_job_queue', []).then((data) => {
+                        if (!data['success']) {
+                            return $.Deferred().reject().promise();
+                        }
+
+                        if (data['return'].length >= 1 && !animated) {
+                            animated = true;
+                            $('#ui-job-indicator').addClass('active');
+                        } else if (data['return'].length == 0 && animated) {
+                            animated = false;
+                            $('#ui-job-indicator').removeClass('active');
+                        }
+
+                        if (jobQueue != data['return'].length) {
+                            jobs = data['return'];
+                            if ($('#ui-job-indicator .dropdown-menu:visible').length) {
+                                populateJobs();
+                            }
+                            var $el = $('#ui-job-indicator .job-counter');
+                            $el.text(jobs.length);
+                            if (jobs.length == 0) {
+                                $el.fadeOut();
+                            } else if (jobs.length > 0 && !jobQueue) {
+                                $el.fadeIn();
+                            }
+                        }
+                        jobQueue = jobs.length;
+                        setTimeout(jobCheck, 2500)
+                    }).fail(() => {});
+                })();
+        }
     });
 })(jQuery);
 

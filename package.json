@@ -27,6 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "babelify": "^7.3.0",
+    "dayjs": "^1.8.18",
     "jit-grunt": "^0.10.0",
     "jquery": "https://registry.npmjs.org/jquery/-/jquery-3.1.1.tgz",
     "tether": "^1.4.0"
