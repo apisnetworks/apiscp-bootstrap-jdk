@@ -256,7 +256,11 @@ window.apnscp = {
         var text = xhr.responseText, response, msg;
         try {
             response = $.parseJSON(xhr.responseText);
-            msg = response['errors'].join("\n");
+            msg = response['errors'];
+            if (typeof(msg) === 'object') {
+                msg = msg.map((m) => m.message);
+            }
+            msg = msg.join("\n");
         } catch (e) {
             response = "unparseable: " + text;
             console.log(text);
