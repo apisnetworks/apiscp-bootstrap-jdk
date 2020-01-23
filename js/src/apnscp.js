@@ -258,7 +258,7 @@ window.apnscp = {
             response = $.parseJSON(xhr.responseText);
             msg = response['errors'];
             if (typeof(msg) === 'object') {
-                msg = msg.map((m) => m.message);
+                msg = msg.map((m) => m.message || m);
             }
             msg = msg.join("\n");
         } catch (e) {
