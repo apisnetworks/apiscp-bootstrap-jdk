@@ -729,8 +729,8 @@ window.apnscp = {
                 }
             }, $container = $('<div id="' + FILE_CONTAINER + '"><h5 id="file_header" class="">' +
                 'Current Path</h5>' + '<h6 id="selected_dir"></h6>' +
-                '<fieldset class="form-group"><button name="select_dir" class="btn btn-primary " id="select_dir" >Select Path</button>' +
-                '<button class="btn btn-outline-primary ml-3" id="create_dir">New Folder</button></fieldset>' +
+                '<fieldset class="form-group"><button name="select_dir" class="btn btn-primary" type="button" id="select_dir" >Select Path</button>' +
+                '<button class="btn btn-outline-primary ml-3" type="button" id="create_dir">New Folder</button></fieldset>' +
                 '<h4>Directory Browser</h4><div id="file_browser" class="browser_window">' +
                 '</div></div>').appendTo($('#modal .modal-body').empty()).show();
 
