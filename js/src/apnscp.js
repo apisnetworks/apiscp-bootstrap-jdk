@@ -981,7 +981,133 @@ window.apnscp = {
      * jQuery functions
      */
 
-        // jQuery on an empty object, we are going to use this as our Queue
+    $.widget("custom.combobox", {
+        _create: function () {
+            this.wrapper = $("<div>")
+                .addClass("input-group")
+                .insertAfter(this.element);
+
+            this.element.hide();
+            this._createAutocomplete();
+            this._createShowAllButton();
+        },
+
+        _createAutocomplete: function () {
+            var selected = this.element.children(":selected"),
+                value = selected.val() ? selected.text() : "",
+                attrs = {
+                    "title": "",
+                    tabindex: this.element.attr('tabindex') || 0,
+                    'placeholder': this.element.attr('placeholder') || 'Select',
+                }, chk = this.element.attr('autofocus');
+
+            this.input = $("<input>")
+                .appendTo(this.wrapper)
+                .val(value)
+                .attr(attrs)
+                .addClass("form-control")
+                .autocomplete({
+                    delay: 0,
+                    minLength: 0,
+                    source: $.proxy(this, "_source"),
+                    classes: {
+                        'ui-autocomplete': 'dropdown-menu'
+                    }
+                });
+
+            if (typeof chk !== typeof undefined && chk !== false) {
+                this.input.focus();
+            }
+
+            this._on(this.input, {
+                autocompleteselect: function (event, ui) {
+                    ui.item.option.selected = true;
+                    this._trigger("select", event, {
+                        item: ui.item.option
+                    });
+                },
+                autocompletechange: "_removeIfInvalid"
+            });
+        },
+
+        _createShowAllButton: function () {
+            var input = this.input,
+                wasOpen = false;
+
+            $("<a>")
+                .attr({
+                    "tabIndex": -1,
+                    "title": "Show All",
+                    'class': 'btn dropdown-toggle input-group-addon'
+                })
+                .appendTo(this.wrapper)
+                .on("mousedown", function () {
+                    wasOpen = input.autocomplete("widget").is(":visible");
+                })
+                .on("click", function () {
+                    input.trigger("focus");
+
+                    // Close if already visible
+                    if (wasOpen) {
+                        return;
+                    }
+
+                    // Pass empty string as value to search for, displaying all results
+                    input.autocomplete("search", "");
+                });
+        },
+
+        _source: function (request, response) {
+            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+            response(this.element.children("option").map(function () {
+                var text = $(this).text();
+                if (this.value && (!request.term || matcher.test(text)))
+                    return {
+                        label: text,
+                        value: text,
+                        option: this
+                    };
+            }));
+        },
+
+        _removeIfInvalid: function (event, ui) {
+
+            // Selected an item, nothing to do
+            if (ui.item) {
+                return;
+            }
+
+            // Search for a match (case-insensitive)
+            var value = this.input.val(),
+                valueLowerCase = value.toLowerCase(),
+                valid = false;
+            this.element.children("option").each(function () {
+                if ($(this).text().toLowerCase() === valueLowerCase) {
+                    this.selected = valid = true;
+                    return false;
+                }
+            });
+
+            // Found a match, nothing to do
+            if (valid) {
+                return;
+            }
+
+            // Remove invalid value
+            this.input
+                .val("")
+                .attr("title", value + " didn't match any item");
+            this.element.val("");
+            this.input.autocomplete("instance").term = "";
+        },
+
+        _destroy: function () {
+            this.wrapper.remove();
+            this.element.show();
+        }
+    });
+
+    // jQuery on an empty object, we are going to use this as our Queue
     var ajaxQueue = $({});
 
     $.ajaxQueue = function (ajaxOpts) {
@@ -1863,19 +1989,6 @@ window.apnscp = {
 
 apnscp.browser.init();
 
-if (apnscp.browser.type == "msie" && apnscp.browser.version <= 7) {
-    (function (f) {
-        window.setTimeout = f(window.setTimeout);   // overwrites the global function!
-        window.setInterval = f(window.setInterval); // overwrites the global function!
-    })(function (f) {
-        return function (c, t) {
-            var a = [].slice.call(arguments, 2);    // gathers the extra args
-            return f(function () {
-                c.apply(this, a);                   // passes them to your function
-            }, t);
-        };
-    });
-}
 String.prototype.ucwords = apnscp.ucwords;
 // unicode base64 conversion
 window.utoa = function(str) {
