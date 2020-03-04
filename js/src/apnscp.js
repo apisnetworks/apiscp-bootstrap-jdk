@@ -1472,6 +1472,9 @@ window.apnscp = {
                     var filter = INDICATOR.replace(/(?:^|\s)(\w)/g, '.$1');
                     $(filter, items).each(function () {
                         $(this).removeClass(INDICATOR).addClass($(this).data('original-css'));
+                        if (o.disable) {
+                            $(this).parent().prop('disabled', false);
+                        }
                     });
                     return true;
                 });
