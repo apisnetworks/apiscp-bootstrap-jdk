@@ -40,6 +40,76 @@
             return false;
         });
 
+        var lastIndex = -1;
+
+        var searchApps = function (e) {
+            var code = e.keyCode || e.which,
+                term = $(this).val();
+            switch (code) {
+                case 38:
+                case 40:
+                    // down
+                    e.preventDefault();
+                    var $lastFocus = $('#ui-nav .ui-menu-link:visible');
+                    $lastFocus.eq(lastIndex).removeClass('ui-search-caret');
+                    if (code === 40 && ++lastIndex >= $lastFocus.length) {
+                        lastIndex = $lastFocus.length - 1;
+                    } else if (code === 38 && --lastIndex < 0) {
+                        lastIndex = 0;
+                    }
+                    $lastFocus.eq(lastIndex).addClass('ui-search-caret');
+                    return false;
+                case 27:
+                    // escape
+                    $(this).blur();
+                    return false;
+                case 8:
+                    if (term.length > 0) {
+                        // backspace
+                        term = term.substr(0, term.length - 1);
+                    }
+                    break;
+                case 13:
+                    // enter
+                    window.location.href = $('#ui-nav .ui-search-caret').eq(0).attr('href');
+                    return true;
+                default:
+                    lastIndex = -1;
+                    if (code >= 32) {
+                        term += String.fromCharCode(code);
+                    }
+                    break;
+            }
+            $('#ui-nav').find('.ui-menu-category,.ui-menu-category-apps').each(function () {
+                if (this.getAttribute('data-toggle') === 'collapse') {
+                    // sub-menu control
+                    $(this).addClass('hide');
+                    return;
+                }
+                if (-1 !== $(this).text().toLowerCase().indexOf(term.toLowerCase())) {
+                    $(this).removeClass('hide');
+                    if (-1 !== this.className.indexOf('collapse')) {
+                        $(this).addClass('show');
+                    }
+                } else {
+                    $(this).removeClass('ui-search-caret').addClass('hide');
+                }
+            });
+        };
+
+        $('#ui-search').bind('click', function (e) {
+            $(this).tooltip({
+                fallbackPlacement: 'bottom'
+            }).tooltip('show');
+        }).bind('keydown.search', searchApps).blur(function () {
+            setTimeout(function () {
+                $(this).val("").unbind('keypress.search');
+                $('#ui-nav .hide, #ui-nav .ui-menu-link').removeClass('hide show ui-search-caret');
+                $(this).tooltip('dispose');
+            }, 200);
+
+        });
+
 	$('.dropdown-menu-form').persistDropdownForm();
 
         $('#ui-account-gauges').hover( function() {

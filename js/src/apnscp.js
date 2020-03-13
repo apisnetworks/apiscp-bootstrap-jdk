@@ -800,7 +800,7 @@ window.apnscp = {
     explorer: function (o, dir) {
         if (typeof window['fileTree'] != "object") {
             $.getScript('/js/filetree.js', function () {
-                return this._explorer(o, dir);
+                return apnscp.explorer(o, dir);
             });
         } else {
             return this._explorer(o, dir);
