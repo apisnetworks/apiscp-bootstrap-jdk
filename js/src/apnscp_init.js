@@ -98,6 +98,11 @@
         };
 
         $('#ui-search').bind('click', function (e) {
+            // roughly md and below
+            if (window.hasTouchscreen() && getNestedObject(matchMedia("(max-width: 992px)"), 'matches')) {
+                return;
+            }
+
             $(this).tooltip({
                 fallbackPlacement: 'bottom'
             }).tooltip('show');

@@ -198,7 +198,7 @@ module.exports = function (grunt) {
 	require('jit-grunt')(grunt)
 	require('time-grunt')(grunt)
 
-	grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'browserify', 'babel:dist', 'exec:uglify', 'copy:min-js'])
+	grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'browserify', 'copy:js', 'babel:dist', 'exec:uglify', 'copy:min-js'])
 	//grunt.registerTask('dist-js', ['babel:dev', 'concat', 'copy:webpack', 'babel:dist', 'browserify', 'copy:js', /*'exec:uglify'*/])
 
 	grunt.registerTask('js-compile', ['babel:dev', 'concat', 'copy:webpack', 'browserify', 'copy:js']);

@@ -251,6 +251,30 @@ window.apnscp = {
         return o.async ? deferred : $.parseJSON(xhr.responseText);
     },
 
+    render: function(vars, action) {
+        if (action[0] !== '/') {
+            action = '/apps/' + session.appId + '/' + action;
+        }
+        return $.ajax(apnscp.call_app_ajax(null, null, [], {
+            url: action,
+            method: 'POST',
+            dataType: 'html',
+            data: vars || {},
+        }));
+    },
+
+    post: function(vars, action) {
+        if (action[0] !== '/') {
+            action = '/apps/' + session.appId + '/' + action;
+        }
+        return $.ajax(apnscp.call_app_ajax(null, null, [], {
+            url: action,
+            method: 'POST',
+            dataType: 'json',
+            data: vars || {},
+        }))
+    },
+
     ajaxError: function (xhr, textStatus, errorThrown) {
         /** ignore uninitialized requests */
         var text = xhr.responseText, response, msg;
@@ -1907,6 +1931,7 @@ window.apnscp = {
 
             return this;
         },
+
 
         /**
          * Create a scollable div
