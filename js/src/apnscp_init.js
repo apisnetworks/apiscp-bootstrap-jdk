@@ -110,7 +110,7 @@
 
         });
 
-	$('.dropdown-menu-form').persistDropdownForm();
+	    $('.dropdown-menu-form').persistDropdownForm();
 
         $('#ui-account-gauges').hover( function() {
             //$('#ui-gauge-refresh').show();
@@ -231,6 +231,30 @@ RegExp.quote = function(str) {
 
 String.prototype.unquote = function() {
     return this.replace(/^['"]+|\s+|\\|(;\s?})+|['"]$/g, '');
+};
+
+window.hasTouchscreen = function() {
+    if ("maxTouchPoints" in navigator) {
+        return navigator.maxTouchPoints > 0;
+    }
+    if ("msMaxTouchPoints" in navigator) {
+        return navigator.msMaxTouchPoints > 0;
+    }
+
+    var hasTouchScreen, mQ = window.matchMedia && matchMedia("(pointer:coarse)");
+    if (mQ && mQ.media === "(pointer:coarse)") {
+        hasTouchScreen = !!mQ.matches;
+    } else if ('orientation' in window) {
+        hasTouchScreen = true; // deprecated, but good fallback
+    } else {
+        // Only as a last resort, fall back to user agent sniffing
+        var UA = navigator.userAgent;
+        hasTouchScreen = (
+            /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
+            /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
+        );
+    }
+    return hasTouchScreen;
 };
 
 window.getNestedObject = function(nestedObj, pathArr) {

@@ -984,10 +984,14 @@ window.apnscp = {
     $.widget("custom.combobox", {
         _create: function () {
             this.wrapper = $("<div>")
-                .addClass("input-group")
+                .addClass("input-group " + (window.hasTouchscreen() ? 'd-none d-sm-flex' : ''))
                 .insertAfter(this.element);
 
-            this.element.hide();
+            if (window.hasTouchscreen()) {
+                this.element.addClass("d-block w-100 d-sm-none");
+            } else {
+                this.element.hide();
+            }
             this._createAutocomplete();
             this._createShowAllButton();
         },
@@ -1019,7 +1023,30 @@ window.apnscp = {
                 this.input.focus();
             }
 
+            var suppressKeyPress;
             this._on(this.input, {
+                keydown: function (event) {
+                    this.input.autocomplete("instance")._trigger('keydown', event);
+                    var keyCode = $.ui.keyCode;
+                    suppressKeyPress = false;
+                    switch (event.keyCode) {
+                        case keyCode.PAGE_UP:
+                        case keyCode.PAGE_DOWN:
+                            suppressKeyPress = true;
+                            event.preventDefault();
+                            break;
+                    }
+                },
+
+                keypress: function (event) {
+                    this.input.autocomplete("instance")._trigger('keypress', event);
+                    if (suppressKeyPress) {
+                        suppressKeyPress = false;
+                        event.preventDefault();
+                        return;
+                    }
+                },
+
                 autocompleteselect: function (event, ui) {
                     ui.item.option.selected = true;
                     this._trigger("select", event, {

@@ -12,7 +12,7 @@
 
 var APNSCP_PATH = "/usr/local/apnscp",
 	JS_PATH = APNSCP_PATH + "/public/js",
-	PRODUCTION = parseInt(process.env.PRODUCTION),
+	PRODUCTION = parseInt(process.env.PRODUCTION) || 1,
 	DESTINATION = 'apnscp.js';
 var es2015 = require('babel-preset-es2015');
 module.exports = function (grunt) {
