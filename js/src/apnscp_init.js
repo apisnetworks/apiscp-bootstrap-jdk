@@ -102,7 +102,6 @@
             if (window.hasTouchscreen() && getNestedObject(matchMedia("(max-width: 992px)"), 'matches')) {
                 return;
             }
-
             $(this).tooltip({
                 fallbackPlacement: 'bottom'
             }).tooltip('show');
@@ -179,14 +178,20 @@
                     $('#ui-job-queue').empty();
                     for (var idx = jobs.length - 1; idx >= 0; idx--) {
                         var job = jobs[idx], reservedTime = dayjs.unix(parseInt(job.reserved_at)).fromNow(),
-                            badgeClass = 'badge badge-info';
-                        if (!job.reserved_at) {
+                            badgeClass = 'badge badge-info', label;
+                        if (job.status === 'pending') {
                             badgeClass = 'badge badge-default';
                             reservedTime = 'pending';
+                        } else if (job.status === 'reserved') {
+                            badgeClass = 'badge badge-success';
+                        } else if (job.status === 'failed') {
+                            badgeClass = 'badge badge-danger';
+                            reservedTime = 'failure';
                         }
+                        label = (job.tag.length ? job.tag.join(', ') : job.name);
                         $('#ui-job-queue', this).append($('<li class="job" data-id="' + job.id + '">' +
-                            job.name +
-                            '</li>').prepend($('<span>').attr('class', badgeClass).text(reservedTime)));
+                            label +
+                            '</li>').prepend($('<span>').attr('class', badgeClass + ' mr-1').text(reservedTime)));
                     }
                 };
             $('#ui-job-indicator').on('show.bs.dropdown', function () {
@@ -198,12 +203,29 @@
                             return $.Deferred().reject().promise();
                         }
 
-                        if (data['return'].length >= 1 && !animated) {
-                            animated = true;
-                            $('#ui-job-indicator').addClass('active');
-                        } else if (data['return'].length == 0 && animated) {
-                            animated = false;
-                            $('#ui-job-indicator').removeClass('active');
+                        if (data['return'].length >= 1) {
+                            var classes = 'active';
+
+                            for (var idx = data['return'].length - 1; idx >= 0; idx--) {
+                                var job = data['return'][idx];
+                                if (job.status === 'reserved') {
+                                    if (-1 === document.getElementById('ui-job-indicator').className.indexOf('running')) {
+                                        animated = true;
+                                        classes += ' running';
+                                    }
+
+                                    break;
+                                }
+                            }
+                            $('#ui-job-indicator').addClass(classes);
+                        }
+
+                        if (data['return'].length == 0 || !animated) {
+                            var classes = !animated ? 'running' : '';
+                            if (data['return'].length === 0) {
+                                classes = 'active running';
+                            }
+                            $('#ui-job-indicator').removeClass(classes);
                         }
 
                         if (jobQueue != data['return'].length) {
