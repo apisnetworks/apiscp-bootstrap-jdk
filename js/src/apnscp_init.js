@@ -71,6 +71,10 @@
                     break;
                 case 13:
                     // enter
+                    var href = $('#ui-nav .ui-search-caret').eq(0).attr('href');
+                    if (!href) {
+                        return false;
+                    }
                     window.location.href = $('#ui-nav .ui-search-caret').eq(0).attr('href');
                     return true;
                 default:
