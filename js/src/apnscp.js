@@ -786,19 +786,23 @@ window.apnscp = {
         });
     },
     modal: function ($content, o) {
-        var dialog = $('#modal'),
+        var dialog = o.dialog || $('#modal'),
             o = $.extend({}, {
                 buttons: null,
                 keyboard: true,
                 size: null
             }, o), modalSize;
-        dialog.find('.modal-body').empty().append([].slice.call($content || []).map(
-            function (a) {
-                // take a copy of the element otherwise switching
-                // between modals will lose it
-                return $(a).clone(true).removeClass('hide');
-            })
-        );
+
+        if ($content !== null) {
+            // let o.dialog override modal content
+            dialog.find('.modal-body').empty().append([].slice.call($content || []).map(
+                function (a) {
+                    // take a copy of the element otherwise switching
+                    // between modals will lose it
+                    return $(a).clone(true).removeClass('hide');
+                })
+            );
+        }
         if (!o.keyboard) {
             $('.modal-footer', dialog).find('button').hide();
         }
@@ -814,10 +818,12 @@ window.apnscp = {
         } else if (o.size === "small") {
             modalSize = 'modal-sm';
         }
+
         dialog.children('.modal-dialog').removeClass('modal-lg modal-sm').addClass(modalSize);
 
         return dialog;
     },
+
     indicator: function (css) {
         return $('<i class="ui-ajax-indicator"></i>').css(css || {});
     },
