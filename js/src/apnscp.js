@@ -786,12 +786,11 @@ window.apnscp = {
         });
     },
     modal: function ($content, o) {
-        var dialog = o.dialog || $('#modal'),
-            o = $.extend({}, {
+        var o = $.extend({}, {
                 buttons: null,
                 keyboard: true,
                 size: null
-            }, o), modalSize;
+            }, o), modalSize, dialog = o.dialog || $('#modal');
 
         if ($content !== null) {
             // let o.dialog override modal content
