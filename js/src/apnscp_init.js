@@ -128,15 +128,10 @@
             //$(this).tooltip
         }).click (function() { apnscp.refresh_gauge(); });
         $('#ui-side-menu-toggle').click(function() {
-            var target = $(this).data('target');
+            var target = $(this).data('target'), toggle = $(this).attr('aria-expanded') == 'true' ? 'false' : 'true';
             // do not like...
-            if ($(this).attr('aria-expanded') === "true") {
-                $(target).hide();
-                $(this).removeAttr('aria-expanded', "false");
-            } else {
-                $(target).show();
-                $(this).attr('aria-expanded', "true");
-            }
+            $(this).attr('aria-expanded', toggle);
+            $(target).attr('aria-expanded', toggle);
             return false;
             //$.get($(this).data('href'));
         });
@@ -190,7 +185,7 @@
                             badgeClass = 'badge badge-success';
                         } else if (job.status === 'failed') {
                             badgeClass = 'badge badge-danger';
-                            reservedTime = 'failure';
+                            reservedTime = 'failed';
                         }
                         label = (job.tag.length ? job.tag.join(', ') : job.name);
                         $('#ui-job-queue', this).append($('<li class="job" data-id="' + job.id + '">' +
