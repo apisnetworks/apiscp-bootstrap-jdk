@@ -12,6 +12,14 @@
         });
     });
     $(window).on('load', function () {
+
+        $('#modal').on('keydown', function (e) {
+            if (e.which ===  $.ui.keyCode.ENTER) {
+                $(e.currentTarget).find('.btn-primary:first-of-type').triggerHandler('click');
+                return false;
+            }
+        });
+
         $('#ui-help-container').click(function(e) {
             switch (e.target.id) {
                 case 'ui-wiki-link':
