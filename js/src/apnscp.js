@@ -393,9 +393,7 @@ window.apnscp = {
             options.success = options.callback;
         }
         try {
-            if ($.isPlainObject(args)) {
-                args = $.makeArray(args);
-            } else if (!$.isArray(args)) {
+            if (!$.isArray(args) && !$.isPlainObject(args)) {
                 args = $.makeArray(args);
             }
         } catch (e) {
