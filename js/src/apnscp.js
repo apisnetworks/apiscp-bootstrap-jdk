@@ -1458,7 +1458,7 @@ window.apnscp = {
             return this;
         },
         ajaxWait: function (o) {
-            var INDICATOR = 'fa-spinner fa-pulse', items = [],
+            var INDICATOR = 'ui-ajax-indicator ui-ajax-loading', items = [],
                 o = $.extend({}, {
                     disable: true,
                     reset: true
