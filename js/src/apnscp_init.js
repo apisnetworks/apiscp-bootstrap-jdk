@@ -12,6 +12,12 @@
         });
     });
     $(window).on('load', function () {
+        if (session.useOpener) {
+            $("a[href^='http']:not([href*='" + $('<a>', {href: apnscp.getUrl()}).prop('hostname') + "'])").each(function (i, e) {
+                this.setAttribute('rel', 'external');
+                this.setAttribute('target', session.useOpener != true ? session.useOpener : '_new');
+            });
+        }
 
         $('#modal').on('keydown', function (e) {
             if (e.which ===  $.ui.keyCode.ENTER) {
