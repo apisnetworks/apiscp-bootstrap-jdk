@@ -16,6 +16,9 @@
             // idea via @anatoli
             // https://discord.com/channels/383071796032831488/506744233626173440/813156223015977010
             $("a[href^='http']:not([href*='" + $('<a>', {href: apnscp.getUrl()}).prop('hostname') + "'])").each(function (i, e) {
+                if (-1 !== [...this.classList].indexOf("ui-action-visit-site-tab")) {
+                    return true;
+                }
                 this.setAttribute('rel', 'external');
                 this.setAttribute('target', session.useOpener != true ? session.useOpener : '_new');
             });
