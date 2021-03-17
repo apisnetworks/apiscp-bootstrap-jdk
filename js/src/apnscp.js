@@ -193,7 +193,8 @@ window.apnscp = {
                 type: "POST",
                 url: "/ajax_engine?engine=cmd&fn=" + cmd,
                 dataType: "json",
-                data: data,
+                contentType: (o.dataType || 'json') === 'json' ? 'application/json' : 'application/x-www-form-urlencoded',
+                data: (o.dataType || 'json') === 'json' ? JSON.stringify(data) : data,
                 beforeSend: function () {
                     if (o.indicator) {
                         $(o.indicator).removeClass('ui-ajax-success ui-ajax-error').addClass('ui-ajax-indicator ui-ajax-loading');
