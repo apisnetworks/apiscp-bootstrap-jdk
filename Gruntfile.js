@@ -140,7 +140,7 @@ module.exports = function (grunt) {
 			webpack: {
 				expand: true,
 				cwd: 'js/src/',
-				src: ['master.js', 'jquery.js', 'apnscp_init.js', 'apnscp.js', 'jquery_ui.js', 'clipboard.js'],
+				src: ['master.js', 'intro.js', 'jquery.js', 'apnscp_init.js', 'apnscp.js', 'jquery_ui.js', 'clipboard.js'],
 				dest: 'dist/js/'
 			},
 			js: {

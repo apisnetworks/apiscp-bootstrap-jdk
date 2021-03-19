@@ -3,6 +3,8 @@
  */
 $ = window.jQuery;
 
+import {introJs} from './intro.js';
+
 window.apnscp = {
     navFocus: function () {
         // prevent pushing state on back
@@ -835,7 +837,9 @@ window.apnscp = {
         }
 
     },
-
+    tour: function () {
+        return introJs();
+    },
     ucwords: function (str) {
         return (str || this + "").replace(/^(.)|\s(.)/g,
             function (c) {
