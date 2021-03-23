@@ -24,6 +24,10 @@
             });
         }
 
+        $('.warn[data-prompt]').click(function () {
+            return confirm(this.getAttribute('data-prompt'));
+        });
+
         $('#modal').on('keydown', function (e) {
             if (e.which ===  $.ui.keyCode.ENTER) {
                 $(e.currentTarget).find('.btn-primary:first-of-type').triggerHandler('click');
