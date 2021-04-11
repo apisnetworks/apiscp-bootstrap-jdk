@@ -1426,28 +1426,39 @@ window.apnscp = {
             return perScore;
         },
 
-        highlight: function (o) {
-            o = $.extend({click: true}, o);
+        highlight: function highlight(o) {
+            o = $.extend({click: true, live: false}, o);
             this.hover(function () {
                 $(this).find('li,td,div.row').addClass("highlight_over");
             }, function () {
                 $(this).find('li,td,div.row').removeClass("highlight_over");
-            }).on('click', function (e) {
+            }).bind('click', o.live ? 'li,td,div.row' : this, function (e) {
                 if (!o.click) return true;
 
-                var target = $(e.target).get(0), node = target.nodeName, type =
-                    target.type || "";
-                // only fire if
-                if (node !== 'SPAN' && node !== 'DIV' && node !== 'LI' && node != 'TD' &&
-                    (node != 'INPUT' || (type && type.toUpperCase() != 'CHECKBOX'))) {
+                var target, node, type;
+                if (o.live) {
+                    target = $(e.target).closest('li, td, div.row', this).get(0);
+                } else {
+                    target = $(e.target).get(0);
+                }
+
+                if (!target) {
+                    return;
+                }
+
+                node = o.live ? e.target.nodeName : target.nodeName;
+                type = (o.live ? e.target.type : target.type) || "";
+
+                // only fire if event originated in monitored nodes
+                if (node !== 'SPAN' && node !== 'DIV' && node !== 'LI' && node != 'TD' && (node != 'INPUT' || type && type.toUpperCase() != 'CHECKBOX')) {
                     return true;
                 }
 
-                var $checkbox = $(this).find(':checkbox:eq(0)'),
+                var $checkbox = $(o.live ? target : this).find(':checkbox:eq(0)'),
                     isChecked = $checkbox.prop('checked');
-                $(this).find('li,td,div.row').toggleClass('ui-highlight');
-                // originated within checkbox, no need to fire
+                $(o.live ? target : this).toggleClass('ui-highlight');
 
+                // originated within checkbox, no need to fire
                 if (e.target.type && e.target.type != 'undefined' && e.target.type.toLowerCase() == 'checkbox') {
                     // pass
                 } else if (isChecked) {
@@ -1459,9 +1470,9 @@ window.apnscp = {
                 return true;
             });
 
-
             return this;
         },
+
         ajaxWait: function (o) {
             var INDICATOR = 'ui-ajax-indicator ui-ajax-loading', items = [],
                 o = $.extend({}, {
