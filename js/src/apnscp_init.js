@@ -192,7 +192,8 @@
             return false;
         });
 
-        if (getNestedObject(session, 'role') === 'admin') {
+        var role = getNestedObject(session, 'role');
+        if (['admin', 'site'].includes(getNestedObject(session, 'role'))) {
             dayjs.extend(relativeTime);
             var jobCheck, animated = false, jobQueue = 0, jobs = [],
                 populateJobs = function()
