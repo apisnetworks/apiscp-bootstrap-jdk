@@ -207,6 +207,12 @@ window.apnscp = {
                 /* use custom fail/done handlers */
                 useCustomHandlers: false
             }, o);
+
+        if (o.useQueue) {
+            // passed to $.ajaxQueue
+            return o;
+        }
+
         var xhr = $.ajax(o),
             deferred = $.Deferred();
         var that = this;
