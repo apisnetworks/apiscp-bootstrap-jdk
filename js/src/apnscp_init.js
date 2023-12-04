@@ -221,7 +221,7 @@
                 populateJobs();
             });
             (jobCheck = function() {
-                    apnscp.cmd('misc_get_job_queue', []).then((data) => {
+                    apnscp.cmd('misc_get_job_queue', [], {useCustomHandlers: true}).then((data) => {
                         if (!data['success']) {
                             return $.Deferred().reject().promise();
                         }
