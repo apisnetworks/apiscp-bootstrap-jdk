@@ -193,7 +193,7 @@ window.apnscp = {
             {
                 indicator: null,
                 type: "POST",
-                url: "/ajax_engine?engine=cmd&fn=" + cmd,
+                url: (session.multiPath || "") + "/ajax_engine?engine=cmd&fn=" + cmd,
                 dataType: "json",
                 contentType: (o.dataType || 'json') === 'json' ? 'application/json' : 'application/x-www-form-urlencoded',
                 data: (o.dataType || 'json') === 'json' ? JSON.stringify(data) : data,
@@ -262,7 +262,7 @@ window.apnscp = {
 
     render: function(vars, action) {
         if (action[0] !== '/') {
-            action = '/apps/' + session.appId + '/' + action;
+            action = this.appUrl(null, action);
         }
         return $.ajax(apnscp.call_app_ajax(null, null, [], {
             url: action,
@@ -272,9 +272,13 @@ window.apnscp = {
         }));
     },
 
+    appUrl: function(app, action) {
+      return (session.multiPath || '') + '/apps/' + (app || session.appId) + '/' + action;
+    },
+
     post: function(vars, action) {
         if (action[0] !== '/') {
-            action = '/apps/' + session.appId + '/' + action;
+            action = this.appUrl(null, action);
         }
         return $.ajax(apnscp.call_app_ajax(null, null, [], {
             url: action,
@@ -388,7 +392,7 @@ window.apnscp = {
                 success: function () {
                 }, dataType: "json", head: false, indicator: null
             },
-            url = '/ajax?engine=app&app=' + app + '&fn=' + fn;
+            url = (session.multiPath || "") + '/ajax?engine=app&app=' + app + '&fn=' + fn;
 
         // single arg passed is callback
         if ($.isFunction(o)) {
@@ -888,8 +892,8 @@ window.apnscp = {
         var defaults = {
             dropzone: 'uploadContainer',
             button: 'upload',
-            url: '/apps/filemanager/filemanager-ajax.php', // server side handler
-            progressUrl: '/apps/filemanager/filemanager-ajax.php?fn=upload_progress', // enables cross-browser progress support (more info below)
+            url: this.appUrl('filemanager', 'filemanager-ajax.php'), // server side handler
+            progressUrl: this.appUrl('filemanager', 'filemanager-ajax.php?fn=upload_progress'), // enables cross-browser progress support (more info below)
             responseType: 'json',
             name: 'uploaded_file',
             multiple: true,
@@ -2040,7 +2044,7 @@ window.apnscp = {
             $.ajax({
                 type: "POST",
                 cache: false,
-                url: "/apps/error",
+                url: this.appUrl('error'),
                 data: $.param({
                     'mode': 'report',
                     'message': msg || {},
